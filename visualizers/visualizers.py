@@ -47,11 +47,13 @@ def _prepare_matplotlib():
             font_scale=1.5,
             rc={"lines.linewidth": 2, "grid.linestyle": "--"})
 
-def plot(list_ys, xticks, xlabel, ylabel,
-          legend_names, legend_anchor, legend_location,
-          marker="o", linestyle="-", markersize=10,
-          fontsize=30,
-          savepath=None, figsize=(8,6), dpi=100j):
+def plot(
+        list_ys,
+        xticks, xlabel, ylabel,
+        legend_names, legend_anchor, legend_location,
+        marker="o", linestyle="-", markersize=10,
+        fontsize=30,
+        savepath=None, figsize=(8,6), dpi=100j):
     """
     :type list_ys: list of list of float
     :type xticks: list of str
@@ -97,12 +99,14 @@ def plot(list_ys, xticks, xlabel, ylabel,
         print("Saved a figure to %s" % savepath)
     plt.clf()
 
-def errorbar(list_ys, list_es, xticks, xlabel, ylabel,
-          legend_names, legend_anchor, legend_location,
-          marker, linestyle, markersize,
-          capsize, capthick,
-          fontsize,
-          savepath, figsize, dpi):
+def errorbar(
+        list_ys, list_es,
+        xticks, xlabel, ylabel,
+        legend_names, legend_anchor, legend_location,
+        marker="o", linestyle="-", markersize=10,
+        capsize=4.0, capthick=2.0,
+        fontsize=30,
+        savepath=None, figsize=(8,6), dpi=100):
     """
     :type list_ys: list of list of float
     :type list_es: list of list of float
@@ -152,7 +156,8 @@ def errorbar(list_ys, list_es, xticks, xlabel, ylabel,
         print("Saved a figure to %s" % savepath)
     plt.clf()
 
-def bar(list_ys, xticks, xlabel, ylabel,
+def bar(list_ys,
+        xticks, xlabel, ylabel,
         legend_names, legend_anchor, legend_location,
         fontsize=30,
         savepath=None, figsize=(8,6), dpi=100):
@@ -202,12 +207,14 @@ def bar(list_ys, xticks, xlabel, ylabel,
         print("Saved a figure to %s" % savepath)
     plt.clf()
 
-def heatmap(matrix, xticks, yticks, xlabel, ylabel,
-          vmin=None, vmax=None,
-          annotate_counts=True, show_colorbar=True, colormap=None,
-          linewidths=0, fmt=".2g",
-          fontsize=30,
-          savepath=None, figsize=(8,6), dpi=100):
+def heatmap(
+        matrix,
+        xticks, yticks, xlabel, ylabel,
+        vmin=None, vmax=None,
+        annotate_counts=True, show_colorbar=True, colormap=None,
+        linewidths=0, fmt=".2g",
+        fontsize=30,
+        savepath=None, figsize=(8,6), dpi=100):
     """
     :type matrix: list of list of float
     :type xticks: list of str
