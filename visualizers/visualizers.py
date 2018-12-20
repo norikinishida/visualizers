@@ -20,6 +20,14 @@ COLORMAPS = [
         "RdY|Gn", "Spectral", "coolwarm", "bwr", "seismic",
         ]
 
+LEGEND_LOCATIONS = [
+        "upper left",
+        "upper right",
+        "lower left",
+        "lower right",
+        "center left",
+        "center right",
+        ]
 
 def _prepare_matplotlib():
     # Presetting for matplotlib
@@ -39,55 +47,11 @@ def _prepare_matplotlib():
             font_scale=1.5,
             rc={"lines.linewidth": 2, "grid.linestyle": "--"})
 
-def plot(
-        data,
-        xticks, xlabel, ylabels,
-        legend_names, legend_anchor, legend_location,
-        marker="o", linestyle="-", markersize=10,
-        fontsize=30,
-        savepaths=None, figsize=(8,6), dpi=100):
-    """
-    :type data: {str: list of list of float}
-    :type xticks: list of str
-    :type xlabel: str
-    :type ylabels: list of str
-    :type legend_names: list of str
-    :type legend_anchor: (int, int)
-    :type legend_location: str
-    :type marker: str
-    :type linestyle: str
-    :type markersize: int
-    :type fontsize: int
-    :type savepaths: list of str
-    :type figsize: (int, int)
-    :type dpi: int
-    :rtype: None
-    """
-    assert len(set(data.keys()) - set(ylabels)) == 0 # data.keys() should be equivalent to ylabels
-    assert legend_location in ["upper left", "upper right", "lower left", "lower right", "center left", "center right"]
-    if savepaths is not None:
-        assert len(ylabels) == len(savepaths)
-
-    # Preparation
-    _prepare_matplotlib()
-
-    if savepaths is None:
-        savepaths = [None for _ in range(len(ylabels))]
-
-    # Visualization
-    for ylabel, savepath in zip(ylabels, savepaths):
-        _plot(data[ylabel], xticks=xticks, xlabel=xlabel, ylabel=ylabel,
-                  legend_names=legend_names,
-                  legend_anchor=legend_anchor, legend_location=legend_location,
-                  marker=marker, linestyle=linestyle, markersize=markersize,
-                  fontsize=fontsize,
-                  savepath=savepath, figsize=figsize, dpi=dpi)
-
-def _plot(list_ys, xticks, xlabel, ylabel,
+def plot(list_ys, xticks, xlabel, ylabel,
           legend_names, legend_anchor, legend_location,
-          marker, linestyle, markersize,
-          fontsize,
-          savepath, figsize, dpi):
+          marker="o", linestyle="-", markersize=10,
+          fontsize=30,
+          savepath=None, figsize=(8,6), dpi=100j):
     """
     :type list_ys: list of list of float
     :type xticks: list of str
@@ -106,6 +70,10 @@ def _plot(list_ys, xticks, xlabel, ylabel,
     :rtype: None
     """
     assert len(list_ys) == len(legend_names)
+    assert legend_location in LEGEND_LOCATIONS
+
+    # Preparation
+    _prepare_matplotlib()
 
     plt.figure(figsize=figsize, dpi=dpi)
     for ys, legend_name in zip(list_ys, legend_names):
@@ -129,7 +97,7 @@ def _plot(list_ys, xticks, xlabel, ylabel,
         print("Saved a figure to %s" % savepath)
     plt.clf()
 
-def _errorbar(list_ys, list_es, xticks, xlabel, ylabel,
+def errorbar(list_ys, list_es, xticks, xlabel, ylabel,
           legend_names, legend_anchor, legend_location,
           marker, linestyle, markersize,
           capsize, capthick,
@@ -156,6 +124,10 @@ def _errorbar(list_ys, list_es, xticks, xlabel, ylabel,
     :rtype: None
     """
     assert len(list_ys) == len(legend_names)
+    assert legend_location in LEGEND_LOCATIONS
+
+    # Preparation
+    _prepare_matplotlib()
 
     plt.figure(figsize=figsize, dpi=dpi)
     for ys, es, legend_name in zip(list_ys, list_es, legend_names):
@@ -201,6 +173,7 @@ def bar(list_ys, xticks, xlabel, ylabel,
     assert len(list_ys) == len(legend_names)
     for ys in list_ys:
         assert len(ys) == len(xticks)
+    assert legend_location in LEGEND_LOCATIONS
 
     # Preparation
     _prepare_matplotlib()
