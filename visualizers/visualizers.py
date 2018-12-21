@@ -48,14 +48,15 @@ def _prepare_matplotlib():
             rc={"lines.linewidth": 2, "grid.linestyle": "--"})
 
 def plot(
-        list_ys,
+        list_ys, list_xs,
         xticks, xlabel, ylabel,
         legend_names, legend_anchor, legend_location,
         marker="o", linestyle="-", markersize=10,
         fontsize=30,
-        savepath=None, figsize=(8,6), dpi=100j):
+        savepath=None, figsize=(8,6), dpi=100):
     """
     :type list_ys: list of list of float
+    :type list_xs: list of list of float
     :type xticks: list of str
     :type xlabel: str
     :type ylabel: str
@@ -72,16 +73,27 @@ def plot(
     :rtype: None
     """
     assert len(list_ys) == len(legend_names)
+    if list_xs is not None:
+        assert len(list_xs) == len(legend_names)
+        assert xticks is None
+    if xticks is not None:
+        assert list_xs is None
     assert legend_location in LEGEND_LOCATIONS
 
     # Preparation
     _prepare_matplotlib()
 
     plt.figure(figsize=figsize, dpi=dpi)
-    for ys, legend_name in zip(list_ys, legend_names):
-        plt.plot(ys,
-                 marker=marker, linestyle=linestyle, ms=markersize,
-                 label=r"%s" % legend_name)
+    if list_xs is None:
+        for ys, legend_name in zip(list_ys, legend_names):
+            plt.plot(ys,
+                     marker=marker, linestyle=linestyle, ms=markersize,
+                     label=r"%s" % legend_name)
+    else:
+        for xs, ys, legend_name in zip(list_xs, list_ys, legend_names):
+            plt.plot(xs, ys,
+                     marker=marker, linestyle=linestyle, ms=markersize,
+                     label=r"%s" % legend_name)
     if xticks is None:
         plt.xticks(fontsize=fontsize-5)
     else:
@@ -97,10 +109,10 @@ def plot(
     else:
         plt.savefig(savepath, bbox_inches="tight")
         print("Saved a figure to %s" % savepath)
-    plt.clf()
+    plt.close()
 
 def errorbar(
-        list_ys, list_es,
+        list_ys, list_es, list_xs,
         xticks, xlabel, ylabel,
         legend_names, legend_anchor, legend_location,
         marker="o", linestyle="-", markersize=10,
@@ -110,6 +122,7 @@ def errorbar(
     """
     :type list_ys: list of list of float
     :type list_es: list of list of float
+    :type list_xs: list of list of float
     :type xticks: lsit of str
     :type xlabel: str
     :type ylabel: str
@@ -127,19 +140,32 @@ def errorbar(
     :type dpi: int
     :rtype: None
     """
-    assert len(list_ys) == len(legend_names)
+    assert len(list_ys) == len(list_es) == len(legend_names)
+    if list_xs is not None:
+        assert len(list_xs) == len(legend_names)
+        assert xticks is None
+    if xticks is not None:
+        assert list_xs is None
     assert legend_location in LEGEND_LOCATIONS
 
     # Preparation
     _prepare_matplotlib()
 
     plt.figure(figsize=figsize, dpi=dpi)
-    for ys, es, legend_name in zip(list_ys, list_es, legend_names):
-        plt.errorbar([i for i in range(len(ys))],
-                     ys, es,
-                     marker=marker, linestyle=linestyle, ms=markersize,
-                     capsize=capsize, capthick=capthick,
-                     label=r"%s" % legend_name)
+    if list_xs is None:
+        for ys, es, legend_name in zip(list_ys, list_es, legend_names):
+            plt.errorbar([i for i in range(len(ys))],
+                         ys, es,
+                         marker=marker, linestyle=linestyle, ms=markersize,
+                         capsize=capsize, capthick=capthick,
+                         label=r"%s" % legend_name)
+    else:
+        for xs, ys, es, legend_name in zip(list_xs, list_ys, list_es, legend_names):
+            plt.errorbar(xs,
+                         ys, es,
+                         marker=marker, linestyle=linestyle, ms=markersize,
+                         capsize=capsize, capthick=capthick,
+                         label=r"%s" % legend_name)
     if xticks is None:
         plt.xticks(fontsize=fontsize-5)
     else:
@@ -154,7 +180,7 @@ def errorbar(
     else:
         plt.savefig(savepath, bbox_inches="tight")
         print("Saved a figure to %s" % savepath)
-    plt.clf()
+    plt.close()
 
 def scatter(
         vectors,
@@ -223,7 +249,7 @@ def scatter(
     else:
         plt.savefig(savepath, bbox_inches="tight")
         print("Saved a figure to %s" % savepath)
-    plt.clf()
+    plt.close()
 
 def bar(list_ys,
         xticks, xlabel, ylabel,
@@ -274,14 +300,14 @@ def bar(list_ys,
     else:
         plt.savefig(savepath, bbox_inches="tight")
         print("Saved a figure to %s" % savepath)
-    plt.clf()
+    plt.close()
 
 def heatmap(
         matrix,
         xticks, yticks, xlabel, ylabel,
         vmin=None, vmax=None,
-        annotate_counts=True, show_colorbar=True, colormap=None,
-        linewidths=0, fmt=".2g",
+        annotate_counts=True, show_colorbar=True, colormap="Blues",
+        linewidths=0.5, fmt=".2g",
         fontsize=30,
         savepath=None, figsize=(8,6), dpi=100):
     """
@@ -327,6 +353,6 @@ def heatmap(
     else:
         plt.savefig(savepath, bbox_inches="tight")
         print("Saved a figure to %s" % savepath)
-    plt.clf()
+    plt.close()
 
 
