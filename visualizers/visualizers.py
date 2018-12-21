@@ -156,6 +156,75 @@ def errorbar(
         print("Saved a figure to %s" % savepath)
     plt.clf()
 
+def scatter(
+        vectors,
+        categories, category_name, category_order,
+        category_centers, category_covariances,
+        xlabel, ylabel,
+        fontsize=30,
+        savepath=None, figsize=(8,6), dpi=100):
+    """
+    :type vectors: numpy.ndarray(shape=(N,2), dtype=float)
+    :type categories: numpy.ndarray(shape=(N,), dtype=str)
+    :type category_name: str
+    :type category_order: list of str
+    :type category_centers: numpy.ndarray(shape=(n_categories, 2), dtype=float)
+    :type category_covariances: numpy.ndarray(shape=(n_categories, 2, 2), dtype=float)
+    :type xlabel: str
+    :type ylabel: str
+    :type fontsize: int
+    :type savepath: str
+    :type figsize: (int, int)
+    :type dpi: int
+    :rtype: None
+    """
+    assert len(vectors.shape) == 2
+    assert len(categories.shape) == 1
+    assert vectors.shape[0] == categories.shape[0]
+    assert vectors.shape[1] == 2
+
+    # Preparation
+    _prepare_matplotlib()
+
+    dictionary = {"x": [], "y": [], category_name: []}
+    dictionary["x"] = vectors[:,0]
+    dictionary["y"] = vectors[:,1]
+    dictionary[category_name] = categories
+    df = pd.DataFrame(dictionary)
+
+    # Visualization
+    plt.figure(figsize=figsize, dpi=dpi)
+    ax = sns.scatterplot(data=df, x="x", y="y",
+                         hue=category_name, hue_order=category_order)
+    if category_centers is not None:
+        for c_i in range(len(category_order)):
+            mean = category_centers[c_i]
+            ax.scatter(x=mean[0], y=mean[1], s=300,
+                       marker="*", linewidth=2,
+                       c="yellow", edgecolors="orange")
+    if category_covariances is not None:
+        palette = sns.color_palette()
+        for c_i in range(len(category_order)):
+            mean = category_centers[c_i]
+            cov = category_covariances[c_i]
+            v, w = np.linalg.eigh(cov)
+            v = 2.0 * np.sqrt(2.0) * np.sqrt(v)
+            u = w[0] / np.linalg.norm(w[0])
+            angle = np.arctan(u[1] / u[0])
+            angle = 180.0 * angle / np.pi # convert to degrees
+            ell = matplotlib.patches.Ellipse(mean, v[0], v[1], 180.0 + angle, color=palette[c_i])
+            ell.set_alpha(0.5)
+            ax.add_artist(ell)
+    plt.tight_layout()
+    plt.xlabel(r"%s" % xlabel, fontsize=fontsize)
+    plt.ylabel(r"%s" % ylabel, fontsize=fontsize)
+    if savepath is None:
+        plt.show()
+    else:
+        plt.savefig(savepath, bbox_inches="tight")
+        print("Saved a figure to %s" % savepath)
+    plt.clf()
+
 def bar(list_ys,
         xticks, xlabel, ylabel,
         legend_names, legend_anchor, legend_location,
@@ -184,17 +253,17 @@ def bar(list_ys,
     _prepare_matplotlib()
 
     # Convert lists to pandas.DataFrame
-    dictionary = {"X": [], "Y": [], "hue": []}
-    dictionary["Y"] = [y for ys in list_ys for y in ys]
+    dictionary = {"x": [], "y": [], "hue": []}
+    dictionary["y"] = [y for ys in list_ys for y in ys]
     for _ in list_ys:
-        dictionary["X"].extend(xticks)
+        dictionary["x"].extend(xticks)
     for i in range(len(list_ys)):
         dictionary["hue"].extend([legend_names[i]] * len(list_ys[i]))
     df = pd.DataFrame(dictionary)
 
     # Visualization
     plt.figure(figsize=figsize, dpi=dpi)
-    sns.barplot(data=df, x="X", y="Y", hue="hue")
+    sns.barplot(data=df, x="x", y="y", hue="hue")
     plt.tight_layout()
     plt.xlabel(r"%s" % xlabel, fontsize=fontsize)
     plt.ylabel(r"%s" % ylabel, fontsize=fontsize)
