@@ -41,8 +41,6 @@ visualizers.errorbar(
 # Scatter (without/with mean positions and covariance regions)
 mean1 = np.asarray([1.0, 1.0])
 mean2 = np.asarray([-1.0, -1.0])
-cov1 = np.random.random((2,2)) + 0.01
-cov2 = np.random.random((2,2)) + 0.01
 cov = np.asarray([[1.0, 0.0],[0.0,1.0]])
 vectors1 = np.random.multivariate_normal(mean1, cov, 200)
 vectors2 = np.random.multivariate_normal(mean2, cov, 200)
