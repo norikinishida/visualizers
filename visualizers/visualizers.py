@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
@@ -83,6 +81,7 @@ def plot(
     # Preparation
     _prepare_matplotlib()
 
+    # Visualization
     plt.figure(figsize=figsize, dpi=dpi)
     if list_xs is None:
         for ys, legend_name in zip(list_ys, legend_names):
@@ -151,6 +150,7 @@ def errorbar(
     # Preparation
     _prepare_matplotlib()
 
+    # Visualization
     plt.figure(figsize=figsize, dpi=dpi)
     if list_xs is None:
         for ys, es, legend_name in zip(list_ys, list_es, legend_names):
@@ -212,6 +212,7 @@ def scatter(
     # Preparation
     _prepare_matplotlib()
 
+    # Convert lists to pandas.DataFrame
     dictionary = {"x": [], "y": [], category_name: []}
     dictionary["x"] = vectors[:,0]
     dictionary["y"] = vectors[:,1]
