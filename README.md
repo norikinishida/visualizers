@@ -1,5 +1,7 @@
 # visualizers
 
+A Python library for visualization (using matplotlib and seaborn).
+
 ## Required packages ##
 
 - numpy
