@@ -74,6 +74,7 @@ visualizers.bar(
     list_ys=list_ys,
     xticks=xticks, xlabel="xlabel", ylabel="ylabel",
     legend_names=legend_names, legend_anchor=(1.0, 1.0), legend_location="upper right",
+    xticks_rotation=0,
     fontsize=30,
     savepath=None, figsize=(8,6), dpi=100)
 

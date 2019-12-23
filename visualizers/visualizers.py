@@ -255,6 +255,7 @@ def scatter(
 def bar(list_ys,
         xticks, xlabel, ylabel,
         legend_names, legend_anchor, legend_location,
+        xticks_rotation=0,
         fontsize=30,
         savepath=None, figsize=(8,6), dpi=100):
     """
@@ -265,6 +266,7 @@ def bar(list_ys,
     :type legend_names: list of str
     :type legend_anchor: (int, int)
     :type legend_location: str
+    :type xticks_rotation: int
     :type fontsize: int
     :type savepath: str
     :type figsize: (int, int)
@@ -290,7 +292,8 @@ def bar(list_ys,
 
     # Visualization
     plt.figure(figsize=figsize, dpi=dpi)
-    sns.barplot(data=df, x="x", y="y", hue="hue")
+    chart = sns.barplot(data=df, x="x", y="y", hue="hue")
+    chart.set_xticklabels(chart.get_xticklabels(), rotation=xticks_rotation)
     plt.tight_layout()
     plt.xlabel(r"%s" % xlabel, fontsize=fontsize)
     plt.ylabel(r"%s" % ylabel, fontsize=fontsize)
