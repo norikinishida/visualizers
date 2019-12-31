@@ -399,7 +399,9 @@ def clustermap(
 
     # Visualization
     plt.figure(figsize=figsize, dpi=dpi)
-    sns.clustermap(df, vmin=vmin, vmax=vmax,
+    sns.clustermap(df,
+                   yticklabels=1,
+                   vmin=vmin, vmax=vmax,
                    annot=annotate_counts, cbar=show_colorbar, cmap=colormap,
                    linewidths=linewidths, fmt=fmt)
     plt.tight_layout()
