@@ -91,3 +91,13 @@ visualizers.heatmap(
     fontsize=30,
     savepath=None, figsize=(8,6), dpi=100)
 
+# Clustermap
+visualizers.clustermap(
+    matrix=matrix,
+    xticks=xticks, yticks=yticks, xlabel="", ylabel="",
+    vmin=None, vmax=None,
+    annotate_counts=True, show_colorbar=True, colormap="Blues",
+    linewidths=0, fmt=".2g",
+    fontsize=30,
+    savepath=None, figsize=(8,6), dpi=100)
+
