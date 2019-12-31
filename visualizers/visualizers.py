@@ -359,4 +359,57 @@ def heatmap(
         print("Saved a figure to %s" % savepath)
     plt.close()
 
+def clustermap(
+        matrix,
+        xticks, yticks, xlabel, ylabel,
+        vmin=None, vmax=None,
+        annotate_counts=True, show_colorbar=True, colormap="Blues",
+        linewidths=0.5, fmt=".2g",
+        fontsize=30,
+        savepath=None, figsize=(8,6), dpi=100):
+    """
+    :type matrix: list of list of float
+    :type xticks: list of str
+    :type yticks: list of str
+    :type xlabel: str
+    :type ylabel: str
+    :type vmin: float
+    :type vmax: float
+    :type annotate_counts: bool
+    :type show_colorbar: bool
+    :type colormap: str
+    :type linewidths: int
+    :type fmt: str
+    :type fontsize: int
+    :type savepath: str
+    :type figsize: int
+    :type dpi: int
+    """
+    assert len(matrix) == len(yticks)
+    for row in matrix:
+        assert len(row) == len(xticks)
+    assert colormap in COLORMAPS
+
+    # Preparation
+    _prepare_matplotlib()
+
+    # Convert lists to pandas.DataFrame
+    matrix = np.asarray(matrix)
+    df = pd.DataFrame(data=matrix, index=yticks, columns=xticks)
+
+    # Visualization
+    plt.figure(figsize=figsize, dpi=dpi)
+    sns.clustermap(df, vmin=vmin, vmax=vmax,
+                   annot=annotate_counts, cbar=show_colorbar, cmap=colormap,
+                   linewidths=linewidths, fmt=fmt)
+    plt.tight_layout()
+    plt.xlabel(r"%s" % xlabel, fontsize=fontsize)
+    plt.ylabel(r"%s" % ylabel, fontsize=fontsize)
+    if savepath is None:
+        plt.show()
+    else:
+        plt.savefig(savepath, bbox_inches="tight")
+        print("Saved a figure to %s" % savepath)
+    plt.close()
+
 
