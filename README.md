@@ -1,5 +1,7 @@
 # visualizers
 
+(c) 2019 Noriki Nishida
+
 A Python library for visualization (using matplotlib and seaborn).
 
 ## Required packages ##
