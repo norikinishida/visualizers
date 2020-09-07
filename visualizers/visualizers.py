@@ -35,14 +35,15 @@ def _prepare_matplotlib():
     matplotlib.rcParams.update({"errorbar.capsize": 2})
 
     # Presetting for seaborn
-    sns.set()
-    sns.set_style(style="darkgrid",
-                  rc={"grid.linestyle": "--"})
-    sns.set_context(context="paper", font_scale=1.5,
-                    rc={"lines.linewidth": 4})
-    sns.set_palette(palette="winter", n_colors=8, desat=1)
-    sns.set(context="talk", style="darkgrid", palette="deep",
-            font_scale=1.5,
+    # sns.set()
+    # sns.set_style(style="darkgrid",
+    #               rc={"grid.linestyle": "--"})
+    # sns.set_context(context="paper", font_scale=1.5,
+    #                 rc={"lines.linewidth": 4})
+    # sns.set_palette(palette="winter", n_colors=8, desat=1)
+    sns.set(style="darkgrid",
+            context="talk", font_scale=1.5,
+            palette="deep",
             rc={"lines.linewidth": 2, "grid.linestyle": "--"})
 
 def plot(
@@ -407,6 +408,79 @@ def clustermap(
     plt.tight_layout()
     plt.xlabel(r"%s" % xlabel, fontsize=fontsize)
     plt.ylabel(r"%s" % ylabel, fontsize=fontsize)
+    if savepath is None:
+        plt.show()
+    else:
+        plt.savefig(savepath, bbox_inches="tight")
+        print("Saved a figure to %s" % savepath)
+    plt.close()
+
+def plot_twinx(
+        ys1, ys2, xs,
+        xlabel, ylabel1, ylabel2,
+        legend_name1, legend_name2,
+        legend_anchor, legend_location,
+        marker="o", linestyle="-", markersize=10,
+        fontsize=30,
+        savepath=None, figsize=(8,6), dpi=100):
+    """
+    :type ys1: list of float
+    :type ys2: list of float
+    :type xs: list of float
+    :type xlabel: str
+    :type ylabel1: str
+    :type ylabel2: str
+    :type legend_name1: str
+    :type legend_name2: str
+    :type legend_anchor: (int, int)
+    :type legend_location: str
+    :type marker: str
+    :type linestyle: str
+    :type markersize: int
+    :type fontsize: int
+    :type savepath: str
+    :type figsize: (int, int)
+    :type dpi: int
+    :rtype: None
+    """
+    assert legend_location in LEGEND_LOCATIONS
+
+    # Preparation
+    _prepare_matplotlib()
+
+    sns_palette = sns.color_palette()
+    color1 = sns_palette[0]
+    color2 = sns_palette[1]
+
+    # Visualization
+    fig = plt.figure(figsize=figsize, dpi=dpi)
+    ax1 = fig.add_subplot(1, 1, 1)
+
+    ax1.plot(xs, ys1,
+             marker=marker, linestyle=linestyle, ms=markersize,
+             label=r"%s" % legend_name1,
+             color=color1)
+    ax1.set_xlabel(r"%s" % xlabel, fontsize=fontsize)
+    ax1.set_ylabel(r"%s" % ylabel1, fontsize=fontsize, color=color1)
+    ax1.tick_params(axis="y", labelcolor=color1)
+    ax1.grid(True)
+
+    ax2 = ax1.twinx()
+
+    ax2.plot(xs, ys2,
+             marker=marker, linestyle=linestyle, ms=markersize,
+             label=r"%s" % legend_name2,
+             color=color2)
+    ax2.set_ylabel(r"%s" % ylabel2, fontsize=fontsize, color=color2)
+    ax2.tick_params(axis="y", labelcolor=color2)
+    ax2.grid(False)
+
+    h1, l1 = ax1.get_legend_handles_labels()
+    h2, l2 = ax2.get_legend_handles_labels()
+    ax1.legend(h1+h2, l1+l2,
+               bbox_to_anchor=legend_anchor, loc=legend_location,
+               borderaxespad=0, fontsize=fontsize-5)
+
     if savepath is None:
         plt.show()
     else:

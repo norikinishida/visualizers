@@ -6,3 +6,4 @@ from .visualizers import scatter
 from .visualizers import bar
 from .visualizers import heatmap
 from .visualizers import clustermap
+from .visualizers import plot_twinx
