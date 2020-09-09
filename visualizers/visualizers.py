@@ -27,7 +27,7 @@ LEGEND_LOCATIONS = [
         "center right",
         ]
 
-MARKERS = ["o", "*", ",", "v", "^", "<", ">",
+MARKERS = ["o", "*", "s", "v", "^", "<", ">",
            "d", "+", "x", "1", "2", "3", "4"]
 
 def _prepare_matplotlib():
@@ -53,6 +53,7 @@ def plot(
         list_ys, list_xs,
         xticks, xlabel, ylabel,
         legend_names, legend_anchor, legend_location,
+        horizontal_line_y=None, vertical_line_x=None,
         linestyle="-", markers=None, marker=None, markersize=10,
         fontsize=30,
         savepath=None, figsize=(8,6), dpi=100):
@@ -65,6 +66,8 @@ def plot(
     :type legend_names: list of str
     :type legend_anchor: (int, int)
     :type legend_location: str
+    :type horizontal_line_y: float
+    :type vertical_line_x: float
     :type linestyle: str
     :type markersize: int
     :type marker: str
@@ -79,8 +82,8 @@ def plot(
     if list_xs is not None:
         assert len(list_xs) == len(legend_names)
         assert xticks is None
-    if xticks is not None:
-        assert list_xs is None
+    else:
+        assert xticks is not None
     assert legend_location in LEGEND_LOCATIONS
     if markers is None:
         if marker is not None:
@@ -104,6 +107,10 @@ def plot(
             plt.plot(xs, ys,
                      linestyle=linestyle, marker=markers[i], ms=markersize,
                      label=r"%s" % legend_name)
+    if horizontal_line_y is not None:
+        plt.axhline(y=horizontal_line_y, xmin=0.0, xmax=1.0, color="black", linestyle="--")
+    if vertical_line_x is not None:
+        plt.axvline(x=vertical_line_x, ymin=0.0, ymax=1.0, color="black", linestyle="--")
     if xticks is None:
         plt.xticks(fontsize=fontsize-5)
     else:
@@ -125,6 +132,7 @@ def errorbar(
         list_ys, list_es, list_xs,
         xticks, xlabel, ylabel,
         legend_names, legend_anchor, legend_location,
+        horizontal_line_y=None, vertical_line_x=None,
         linestyle="-", markers=None, marker=None, markersize=10,
         capsize=4.0, capthick=2.0,
         fontsize=30,
@@ -139,6 +147,8 @@ def errorbar(
     :type legend_names: list of str
     :type legend_anchor: (int, int)
     :type legend_location: str
+    :type horizontal_line_y: float
+    :type vertical_line_x: float
     :type linestyle: str
     :type markers: list of strstr
     :type marker: str
@@ -155,8 +165,8 @@ def errorbar(
     if list_xs is not None:
         assert len(list_xs) == len(legend_names)
         assert xticks is None
-    if xticks is not None:
-        assert list_xs is None
+    else:
+        assert xticks is not None
     assert legend_location in LEGEND_LOCATIONS
     if markers is None:
         if marker is not None:
@@ -184,6 +194,10 @@ def errorbar(
                          linestyle=linestyle, marker=markers[i], ms=markersize,
                          capsize=capsize, capthick=capthick,
                          label=r"%s" % legend_name)
+    if horizontal_line_y is not None:
+        plt.axhline(y=horizontal_line_y, xmin=0.0, xmax=1.0, color="black", linestyle="--")
+    if vertical_line_x is not None:
+        plt.axvline(x=vertical_line_x, ymin=0.0, ymax=1.0, color="black", linestyle="--")
     if xticks is None:
         plt.xticks(fontsize=fontsize-5)
     else:
@@ -434,9 +448,11 @@ def clustermap(
 
 def plot_twinx(
         ys1, ys2, xs,
+        xticks,
         xlabel, ylabel1, ylabel2,
         legend_name1, legend_name2,
         legend_anchor, legend_location,
+        horizontal_line_y=None, vertical_line_x=None,
         linestyle="-", markers=None, marker=None, markersize=10,
         fontsize=30,
         savepath=None, figsize=(8,6), dpi=100):
@@ -444,6 +460,7 @@ def plot_twinx(
     :type ys1: list of float
     :type ys2: list of float
     :type xs: list of float
+    :type xticks: list of str
     :type xlabel: str
     :type ylabel1: str
     :type ylabel2: str
@@ -451,6 +468,8 @@ def plot_twinx(
     :type legend_name2: str
     :type legend_anchor: (int, int)
     :type legend_location: str
+    :type horizontal_line_y: float
+    :type vertical_line_x: float
     :type linestyle: str
     :type markers: list of str
     :type marker: str
@@ -484,6 +503,12 @@ def plot_twinx(
              linestyle=linestyle, marker=markers[0], ms=markersize,
              label=r"%s" % legend_name1,
              color=color1)
+    if xticks is not None:
+        ax1.set_xticks(xticks)
+    if horizontal_line_y is not None:
+        plt.axhline(y=horizontal_line_y, xmin=0.0, xmax=1.0, color="black", linestyle="--")
+    if vertical_line_x is not None:
+        plt.axvline(x=vertical_line_x, ymin=0.0, ymax=1.0, color="black", linestyle="--")
     ax1.set_xlabel(r"%s" % xlabel, fontsize=fontsize)
     ax1.set_ylabel(r"%s" % ylabel1, fontsize=fontsize, color=color1)
     ax1.tick_params(axis="y", labelcolor=color1)
