@@ -27,6 +27,9 @@ LEGEND_LOCATIONS = [
         "center right",
         ]
 
+MARKERS = ["o", "*", ",", "v", "^", "<", ">",
+           "d", "+", "x", "1", "2", "3", "4"]
+
 def _prepare_matplotlib():
     # Presetting for matplotlib
     rc("font", **{"family": "sans-serif",
@@ -50,7 +53,7 @@ def plot(
         list_ys, list_xs,
         xticks, xlabel, ylabel,
         legend_names, legend_anchor, legend_location,
-        marker="o", linestyle="-", markersize=10,
+        linestyle="-", markers=None, marker=None, markersize=10,
         fontsize=30,
         savepath=None, figsize=(8,6), dpi=100):
     """
@@ -62,9 +65,10 @@ def plot(
     :type legend_names: list of str
     :type legend_anchor: (int, int)
     :type legend_location: str
-    :type marker: str
     :type linestyle: str
     :type markersize: int
+    :type marker: str
+    :type markers: list of str
     :type fontsize: int
     :type savepath: str
     :type figsize: (int, int)
@@ -78,6 +82,12 @@ def plot(
     if xticks is not None:
         assert list_xs is None
     assert legend_location in LEGEND_LOCATIONS
+    if markers is None:
+        if marker is not None:
+            markers = [marker for _ in range(len(list_ys))]
+        else:
+            markers = MARKERS
+    assert len(markers) >= len(list_ys)
 
     # Preparation
     _prepare_matplotlib()
@@ -85,14 +95,14 @@ def plot(
     # Visualization
     plt.figure(figsize=figsize, dpi=dpi)
     if list_xs is None:
-        for ys, legend_name in zip(list_ys, legend_names):
+        for i, (ys, legend_name) in enumerate(zip(list_ys, legend_names)):
             plt.plot(ys,
-                     marker=marker, linestyle=linestyle, ms=markersize,
+                     linestyle=linestyle, marker=markers[i], ms=markersize,
                      label=r"%s" % legend_name)
     else:
-        for xs, ys, legend_name in zip(list_xs, list_ys, legend_names):
+        for i, (xs, ys, legend_name) in enumerate(zip(list_xs, list_ys, legend_names)):
             plt.plot(xs, ys,
-                     marker=marker, linestyle=linestyle, ms=markersize,
+                     linestyle=linestyle, marker=markers[i], ms=markersize,
                      label=r"%s" % legend_name)
     if xticks is None:
         plt.xticks(fontsize=fontsize-5)
@@ -115,7 +125,7 @@ def errorbar(
         list_ys, list_es, list_xs,
         xticks, xlabel, ylabel,
         legend_names, legend_anchor, legend_location,
-        marker="o", linestyle="-", markersize=10,
+        linestyle="-", markers=None, marker=None, markersize=10,
         capsize=4.0, capthick=2.0,
         fontsize=30,
         savepath=None, figsize=(8,6), dpi=100):
@@ -129,8 +139,9 @@ def errorbar(
     :type legend_names: list of str
     :type legend_anchor: (int, int)
     :type legend_location: str
-    :type marker: str
     :type linestyle: str
+    :type markers: list of strstr
+    :type marker: str
     :type markersize: int
     :type capsize: float,
     :type capthick: float,
@@ -147,6 +158,12 @@ def errorbar(
     if xticks is not None:
         assert list_xs is None
     assert legend_location in LEGEND_LOCATIONS
+    if markers is None:
+        if marker is not None:
+            markers = [marker for _ in range(len(list_ys))]
+        else:
+            markers = MARKERS
+    assert len(markers) >= len(list_ys)
 
     # Preparation
     _prepare_matplotlib()
@@ -154,17 +171,17 @@ def errorbar(
     # Visualization
     plt.figure(figsize=figsize, dpi=dpi)
     if list_xs is None:
-        for ys, es, legend_name in zip(list_ys, list_es, legend_names):
+        for i, (ys, es, legend_name) in enumerate(zip(list_ys, list_es, legend_names)):
             plt.errorbar([i for i in range(len(ys))],
                          ys, es,
-                         marker=marker, linestyle=linestyle, ms=markersize,
+                         linestyle=linestyle, marker=markers[i], ms=markersize,
                          capsize=capsize, capthick=capthick,
                          label=r"%s" % legend_name)
     else:
-        for xs, ys, es, legend_name in zip(list_xs, list_ys, list_es, legend_names):
+        for i, (xs, ys, es, legend_name) in enumerate(zip(list_xs, list_ys, list_es, legend_names)):
             plt.errorbar(xs,
                          ys, es,
-                         marker=marker, linestyle=linestyle, ms=markersize,
+                         linestyle=linestyle, marker=markers[i], ms=markersize,
                          capsize=capsize, capthick=capthick,
                          label=r"%s" % legend_name)
     if xticks is None:
@@ -420,7 +437,7 @@ def plot_twinx(
         xlabel, ylabel1, ylabel2,
         legend_name1, legend_name2,
         legend_anchor, legend_location,
-        marker="o", linestyle="-", markersize=10,
+        linestyle="-", markers=None, marker=None, markersize=10,
         fontsize=30,
         savepath=None, figsize=(8,6), dpi=100):
     """
@@ -434,8 +451,9 @@ def plot_twinx(
     :type legend_name2: str
     :type legend_anchor: (int, int)
     :type legend_location: str
-    :type marker: str
     :type linestyle: str
+    :type markers: list of str
+    :type marker: str
     :type markersize: int
     :type fontsize: int
     :type savepath: str
@@ -444,6 +462,12 @@ def plot_twinx(
     :rtype: None
     """
     assert legend_location in LEGEND_LOCATIONS
+    if markers is None:
+        if marker is not None:
+            markers = [marker, marker]
+        else:
+            markers = MARKERS
+    assert len(markers) >= 2
 
     # Preparation
     _prepare_matplotlib()
@@ -457,7 +481,7 @@ def plot_twinx(
     ax1 = fig.add_subplot(1, 1, 1)
 
     ax1.plot(xs, ys1,
-             marker=marker, linestyle=linestyle, ms=markersize,
+             linestyle=linestyle, marker=markers[0], ms=markersize,
              label=r"%s" % legend_name1,
              color=color1)
     ax1.set_xlabel(r"%s" % xlabel, fontsize=fontsize)
@@ -468,7 +492,7 @@ def plot_twinx(
     ax2 = ax1.twinx()
 
     ax2.plot(xs, ys2,
-             marker=marker, linestyle=linestyle, ms=markersize,
+             linestyle=linestyle, marker=markers[1], ms=markersize,
              label=r"%s" % legend_name2,
              color=color2)
     ax2.set_ylabel(r"%s" % ylabel2, fontsize=fontsize, color=color2)
@@ -487,5 +511,4 @@ def plot_twinx(
         plt.savefig(savepath, bbox_inches="tight")
         print("Saved a figure to %s" % savepath)
     plt.close()
-
 

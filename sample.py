@@ -13,7 +13,7 @@ visualizers.plot(
     list_ys=list_ys, list_xs=list_xs,
     xticks=None, xlabel="xlabel", ylabel="ylabel",
     legend_names=legend_names, legend_anchor=(1.0, 1.0), legend_location="upper right",
-    marker="o", linestyle="-", markersize=10,
+    linestyle="-", markers=None, markersize=10,
     fontsize=30,
     savepath=None, figsize=(8,6), dpi=100)
 
@@ -31,7 +31,7 @@ visualizers.errorbar(
     list_ys=list_ys, list_es=list_es, list_xs=list_xs,
     xticks=None, xlabel="xlabel", ylabel="ylabel",
     legend_names=legend_names, legend_anchor=(1.0, 1.0), legend_location="upper right",
-    marker="o", linestyle="-", markersize=10,
+    linestyle="-", markers=[".", "."], markersize=10,
     capsize=4.0, capthick=2.0,
     fontsize=30,
     savepath=None, figsize=(8,6), dpi=100)
