@@ -27,8 +27,8 @@ LEGEND_LOCATIONS = [
         "center right",
         ]
 
-MARKERS = ["o", "*", "s", "v", "^", "<", ">",
-           "d", "+", "x", "1", "2", "3", "4"]
+MARKERS = ["o", "s", "v", "^", "<", ">", "d",
+           "*", "+", "x", "1", "2", "3", "4"]
 
 def _prepare_matplotlib():
     # Presetting for matplotlib
@@ -342,7 +342,7 @@ def heatmap(
         matrix,
         xticks, yticks, xlabel, ylabel,
         vmin=None, vmax=None,
-        annotate_counts=True, show_colorbar=True, colormap="Blues",
+        annotate_counts=True, show_colorbar=True, colormap="PuBu",
         linewidths=0.5, fmt=".2g",
         fontsize=30,
         savepath=None, figsize=(8,6), dpi=100):
@@ -380,7 +380,7 @@ def heatmap(
     plt.figure(figsize=figsize, dpi=dpi)
     sns.heatmap(df, vmin=vmin, vmax=vmax,
                 annot=annotate_counts, cbar=show_colorbar, cmap=colormap,
-                linewidths=linewidths, fmt=fmt)
+                linewidths=linewidths, linecolor="white", fmt=fmt)
     plt.tight_layout()
     plt.xlabel(r"%s" % xlabel, fontsize=fontsize)
     plt.ylabel(r"%s" % ylabel, fontsize=fontsize)
@@ -395,7 +395,7 @@ def clustermap(
         matrix,
         xticks, yticks, xlabel, ylabel,
         vmin=None, vmax=None,
-        annotate_counts=True, show_colorbar=True, colormap="Blues",
+        annotate_counts=True, show_colorbar=True, colormap="PuBu",
         linewidths=0.5, fmt=".2g",
         fontsize=30,
         savepath=None, figsize=(8,6), dpi=100):
