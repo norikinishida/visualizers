@@ -49,6 +49,28 @@ def _prepare_matplotlib():
             palette="deep",
             rc={"lines.linewidth": 2, "grid.linestyle": "--"})
 
+    # 日本語を表示するときには以下をコメントアウト
+    ####
+    # # Presetting for matplotlib
+    # rc("font", **{"family": "IPAGothic",
+    #               "sans-serif": ["IPAGothic"]})
+    # rc("text", usetex=False)
+    # matplotlib.rcParams.update({"errorbar.capsize": 2})
+    # 
+    # # Presetting for seaborn
+    # # sns.set()
+    # # sns.set_style(style="darkgrid",
+    # #               rc={"grid.linestyle": "--"})
+    # # sns.set_context(context="paper", font_scale=1.5,
+    # #                 rc={"lines.linewidth": 4})
+    # # sns.set_palette(palette="winter", n_colors=8, desat=1)
+    # sns.set(style="darkgrid",
+    #         context="talk", font_scale=1.5,
+    #         palette="deep",
+    #         rc={"lines.linewidth": 2, "grid.linestyle": "--"},
+    #         font=["IPAGothic"])
+    ####
+
 def plot(
         list_ys, list_xs,
         xticks, xlabel, ylabel,
